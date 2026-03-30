@@ -1,4 +1,4 @@
-const GROQ_KEY = process.env.OPENAI_API_KEY;
+const GROQ_KEY = process.env.GROQ_API_KEY || process.env.OPENAI_API_KEY;
 
 const SYSTEM_PROMPT = `Eres vIAip, el concierge de VIP Experiences, agencia de viajes certificada por Hoteles Xcaret especializada en Hotel Xcaret Arte. Eres elegante, cálido y experto. Detectas el idioma del usuario y respondes en el mismo idioma (español, inglés o portugués).
 
@@ -49,7 +49,6 @@ const SYSTEM_PROMPT = `Eres vIAip, el concierge de VIP Experiences, agencia de v
 - Apple Pay, Google Pay, Visa, Mastercard, AMEX
 - Todos procesados por Stripe con encriptación SSL
 - Traslado privado disponible con pago por Apple Pay (el hotel incluye traslado grupal)
-- Cuando pregunten: "Aceptamos Apple Pay, Google Pay, Visa, Mastercard y AMEX, todos respaldados por Stripe 🔒"
 
 ## URGENCIA Y FECHAS
 - Temporada alta: Semana Santa, julio-agosto, Navidad y Año Nuevo
@@ -74,7 +73,16 @@ module.exports = async (req, res) => {
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).end();
 
+  if (!GROQ_KEY) {
+    console.error('GROQ_API_KEY no está configurada en las variables de entorno');
+    return res.status(200).json({ reply: 'Servicio no disponible temporalmente. Por favor contáctanos por WhatsApp.' });
+  }
+
   const { messages } = req.body || {};
+
+  if (!messages || !Array.isArray(messages)) {
+    return res.status(400).json({ reply: 'Formato de mensaje inválido.' });
+  }
 
   try {
     const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
@@ -91,11 +99,19 @@ module.exports = async (req, res) => {
       })
     });
 
+    if (!response.ok) {
+      const errText = await response.text();
+      console.error('Groq API error:', response.status, errText);
+      return res.status(200).json({ reply: 'Ocurrió un error con el servicio. Por favor contáctanos por WhatsApp.' });
+    }
+
     const data = await response.json();
     if (data.error) throw new Error(data.error.message);
     const reply = data.choices?.[0]?.message?.content || 'Disculpa, hubo un error.';
     res.status(200).json({ reply });
+
   } catch(err) {
+    console.error('Chat error:', err.message);
     res.status(200).json({ reply: 'Ocurrió un error. Por favor contáctanos por WhatsApp.' });
   }
 };
