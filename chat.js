@@ -1,4 +1,4 @@
-const GROQ_KEY = process.env.OPENAI_API_KEY;
+const GROQ_KEY = process.env.GROQ_API_KEY;
 
 const SYSTEM_PROMPT = `Eres vIAip, el concierge de VIP Experiences, agencia de viajes certificada por Hoteles Xcaret especializada en Hotel Xcaret Arte. Eres elegante, cálido y experto. Detectas el idioma del usuario y respondes en el mismo idioma (español, inglés o portugués).
 
