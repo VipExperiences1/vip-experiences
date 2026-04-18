@@ -1,0 +1,4 @@
+/* Logo Color Filters */
+.navbar-logo {
+  filter: hue-rotate(15deg) saturate(2) brightness(0.95) !important;
+}
