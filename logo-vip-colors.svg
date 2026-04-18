@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg class="navbar-logo" viewBox="0 0 250 120" xmlns="http://www.w3.org/2000/svg" style="width: 100%; max-width: 150px; height: auto;">
+  <!-- V (Rojo #C41E3A) -->
+  <text x="15" y="95" font-size="85" font-weight="bold" fill="#C41E3A" font-family="Arial, sans-serif">V</text>
+  
+  <!-- I (Amarillo #F4A517) -->
+  <text x="95" y="95" font-size="85" font-weight="bold" fill="#F4A517" font-family="Arial, sans-serif">I</text>
+  
+  <!-- P (Verde #00897B) -->
+  <text x="145" y="95" font-size="85" font-weight="bold" fill="#00897B" font-family="Arial, sans-serif">P</text>
+</svg>
